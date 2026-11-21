@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sorveteria Polar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ====== CORES E FONTES (mude aqui para trocar o visual do site todo) ====== */
+  :root {
+    --fundo: #fff7fb;
+    --texto: #3a2230;
+    --morango: #ff6f91;
+    --pistache: #9bd6a4;
+    --azul: #6c8cff;
+    --chocolate: #5b3a29;
+    --card: #ffffff;
+    --borda: #f1d9e5;
+    --fonte-titulo: "Bagel Fat One", "Arial Rounded MT Bold", system-ui, sans-serif;
+    --fonte-texto: "DM Sans", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --fundo:#24141e; --texto:#fbe8f1; --card:#33202c; --borda:#4d3242; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--fonte-texto); background: var(--fundo); color: var(--texto); line-height: 1.6; }
+  h1, h2, h3 { font-family: var(--fonte-titulo); font-weight: 400; line-height: 1.1; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--azul); outline-offset: 3px; }
+  .container { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+  /* ====== TOPO ====== */
+  header { padding: 18px 0; }
+  header .container { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .logo { font-family: var(--fonte-titulo); font-size: 1.6rem; color: var(--morango); text-decoration: none; }
+  nav a { color: var(--texto); text-decoration: none; margin-left: 18px; font-weight: 500; }
+  nav a:hover { color: var(--morango); }
+
+  /* ====== HERO COM MONTADOR DE CASQUINHA ====== */
+  .hero { padding: 30px 0 60px; }
+  .hero .container { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; }
+  .hero h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); margin-bottom: 14px; }
+  .hero p { max-width: 46ch; margin-bottom: 22px; }
+
+  .sabores-botoes { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+  .chip {
+    border: 2px solid var(--borda); background: var(--card); color: var(--texto);
+    padding: 8px 14px; border-radius: 999px; font: inherit; font-weight: 500; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .chip:hover { border-color: var(--morango); }
+  .chip i { width: 16px; height: 16px; border-radius: 50%; display: inline-block; }
+
+  .acoes { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .btn {
+    background: var(--morango); color: #fff; border: 0; padding: 13px 22px; border-radius: 14px;
+    font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; display: inline-block;
+  }
+  .btn:hover { filter: brightness(1.07); }
+  .btn.sec { background: transparent; color: var(--texto); border: 2px solid var(--borda); }
+  .btn[aria-disabled="true"] { opacity: .45; pointer-events: none; }
+  #total { font-weight: 700; }
+
+  /* Casquinha */
+  .palco { display: flex; justify-content: center; }
+  .casquinha { position: relative; width: 220px; height: 380px; }
+  .cone {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 150px; height: 190px; clip-path: polygon(0 0, 100% 0, 50% 100%);
+    background:
+      repeating-linear-gradient(45deg, transparent 0 14px, rgba(91,58,41,.25) 14px 16px),
+      repeating-linear-gradient(-45deg, transparent 0 14px, rgba(91,58,41,.25) 14px 16px),
+      #e8b36b;
+  }
+  .bola {
+    position: absolute; left: 50%; width: 140px; height: 120px; border-radius: 50% 50% 46% 46%;
+    transform: translateX(-50%); box-shadow: inset -10px -12px 0 rgba(0,0,0,.08);
+    animation: cair .35s ease-out;
+  }
+  @keyframes cair { from { transform: translate(-50%, -40px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+  .vazio { position: absolute; top: 80px; width: 100%; text-align: center; font-size: .95rem; opacity: .7; }
+
+  /* ====== CARDÁPIO ====== */
+  section { padding: 56px 0; }
+  section h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: 8px; }
+  .sub { margin-bottom: 28px; opacity: .8; }
+  .grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+  .sabor { background: var(--card); border: 2px solid var(--borda); border-radius: 22px; padding: 20px; }
+  .sabor .cor { width: 54px; height: 54px; border-radius: 50%; margin-bottom: 12px; }
+  .sabor h3 { font-size: 1.3rem; margin-bottom: 4px; }
+  .sabor p { font-size: .95rem; opacity: .85; }
+
+  .precos { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-top: 8px; }
+  .preco { background: var(--pistache); color: #1f3a25; border-radius: 18px; padding: 18px; }
+  .preco strong { font-family: var(--fonte-titulo); font-weight: 400; font-size: 1.8rem; display: block; }
+
+  /* ====== CONTATO ====== */
+  .info { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+  .info h3 { font-size: 1.3rem; margin-bottom: 6px; color: var(--morango); }
+  footer { padding: 28px 0 40px; text-align: center; font-size: .9rem; opacity: .75; }
+
+  @media (max-width: 760px) {
+    .hero .container { grid-template-columns: 1fr; }
+    .palco { order: -1; }
+    nav a { margin-left: 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .bola { animation: none; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <a class="logo" href="#">Sorveteria Polar</a>
+    <nav>
+      <a href="#cardapio">Cardápio</a>
+      <a href="#precos">Preços</a>
+      <a href="#contato">Contato</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO: monte sua casquinha -->
+<main>
+<div class="hero">
+  <div class="container">
+    <div>
+      <h1>Monte sua casquinha do seu jeito</h1>
+      <p>Escolha até 3 sabores, veja a casquinha ficar pronta e envie o pedido direto pelo WhatsApp.</p>
+
+      <div class="sabores-botoes" id="botoes" aria-label="Sabores disponíveis"></div>
+
+      <div class="acoes">
+        <a class="btn" id="pedir" href="#" target="_blank" rel="noopener" aria-disabled="true">Pedir no WhatsApp</a>
+        <button class="btn sec" id="limpar" type="button">Limpar</button>
+        <span id="total">Total: R$ 0,00</span>
+      </div>
+    </div>
+
+    <div class="palco">
+      <div class="casquinha" id="casquinha" aria-live="polite">
+        <div class="vazio" id="vazio">Toque em um sabor para começar</div>
+        <div class="cone"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CARDÁPIO -->
+<section id="cardapio">
+  <div class="container">
+    <h2>Sabores do dia</h2>
+    <p class="sub">Feitos todo dia, em pequenas quantidades.</p>
+    <div class="grade" id="grade"></div>
+  </div>
+</section>
+
+<!-- PREÇOS -->
+<section id="precos">
+  <div class="container">
+    <h2>Tamanhos e preços</h2>
+    <div class="precos">
+      <div class="preco"><strong>R$ 8</strong>1 bola na casquinha</div>
+      <div class="preco"><strong>R$ 14</strong>2 bolas na casquinha</div>
+      <div class="preco"><strong>R$ 19</strong>3 bolas na casquinha</div>
+      <div class="preco"><strong>R$ 32</strong>Pote de 500 ml</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="container info">
+    <div>
+      <h3>Endereço</h3>
+      <p>Rua das Flores, 123<br>Centro, Blumenau - SC</p>
+    </div>
+    <div>
+      <h3>Horário</h3>
+      <p>Segunda a sexta: 12h às 22h<br>Sábado e domingo: 11h às 23h</p>
+    </div>
+    <div>
+      <h3>Contato</h3>
+      <p>WhatsApp: (47) 90000-0000<br>Instagram: @sorveteriapolar</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container">© 2026 Sorveteria Polar. Todos os direitos reservados.</div>
+</footer>
+
+<script>
+  // ====== CONFIGURAÇÕES (troque pelos dados reais da sorveteria) ======
+  const WHATSAPP = "5547900000000"; // formato: 55 + DDD + número, sem espaços
+  const PRECOS = { 1: 8, 2: 14, 3: 19 }; // preço conforme a quantidade de bolas
+
+  // Lista de sabores: para adicionar um novo, copie uma linha e mude os dados
+  const SABORES = [
+    { nome: "Morango",    cor: "#ff6f91", desc: "Com pedaços de morango de verdade." },
+    { nome: "Pistache",   cor: "#9bd6a4", desc: "Cremoso, com pistache torrado." },
+    { nome: "Chocolate",  cor: "#7a4a33", desc: "Chocolate meio amargo, bem intenso." },
+    { nome: "Baunilha",   cor: "#f6e3a8", desc: "Clássico, com fava de baunilha." },
+    { nome: "Mirtilo",    cor: "#6c8cff", desc: "Sabor frutado e levemente azedinho." },
+    { nome: "Maracujá",   cor: "#ffc94d", desc: "Sorbet refrescante, sem leite." }
+  ];
+
+  // ====== MONTA O CARDÁPIO NA TELA ======
+  const grade = document.getElementById("grade");
+  SABORES.forEach(s => {
+    grade.insertAdjacentHTML("beforeend",
+      `<div class="sabor"><div class="cor" style="background:${s.cor}"></div><h3>${s.nome}</h3><p>${s.desc}</p></div>`);
+  });
+
+  // ====== MONTADOR DE CASQUINHA ======
+  const botoes = document.getElementById("botoes");
+  const casquinha = document.getElementById("casquinha");
+  const vazio = document.getElementById("vazio");
+  const totalEl = document.getElementById("total");
+  const pedir = document.getElementById("pedir");
+  let escolhidos = []; // sabores que o cliente já escolheu
+
+  SABORES.forEach(s => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip";
+    b.innerHTML = `<i style="background:${s.cor}"></i>${s.nome}`;
+    b.addEventListener("click", () => {
+      if (escolhidos.length >= 3) return; // máximo de 3 bolas
+      escolhidos.push(s);
+      desenhar();
+    });
+    botoes.appendChild(b);
+  });
+
+  document.getElementById("limpar").addEventListener("click", () => { escolhidos = []; desenhar(); });
+
+  function desenhar() {
+    casquinha.querySelectorAll(".bola").forEach(el => el.remove());
+    vazio.style.display = escolhidos.length ? "none" : "block";
+
+    // cada bola nova fica acima da anterior
+    escolhidos.forEach((s, i) => {
+      const bola = document.createElement("div");
+      bola.className = "bola";
+      bola.style.background = s.cor;
+      bola.style.bottom = (150 + i * 62) + "px";
+      bola.style.zIndex = i + 1;
+      casquinha.appendChild(bola);
+    });
+
+    const qtd = escolhidos.length;
+    const total = qtd ? PRECOS[qtd] : 0;
+    totalEl.textContent = "Total: R$ " + total.toFixed(2).replace(".", ",");
+
+    if (qtd) {
+      const nomes = escolhidos.map(s => s.nome).join(", ");
+      const msg = `Olá! Quero uma casquinha com ${qtd} bola(s): ${nomes}. Total: R$ ${total.toFixed(2).replace(".", ",")}.`;
+      pedir.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+      pedir.setAttribute("aria-disabled", "false");
+    } else {
+      pedir.href = "#";
+      pedir.setAttribute("aria-disabled", "true");
+    }
+  }
+  desenhar();
+</script>
+</body>
+</html>
